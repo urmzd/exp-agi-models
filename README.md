@@ -99,7 +99,7 @@ No embedding. No output projection.
 
 ```bash
 # Setup on RunPod
-curl -sSL https://raw.githubusercontent.com/urmzd/exp-agi-models/main/bootstrap.sh | bash
+curl -sSL https://raw.githubusercontent.com/urmzd/exp-agi-models/main/setup.sh | bash
 
 # Or manually
 uv pip install --system -r pyproject.toml
