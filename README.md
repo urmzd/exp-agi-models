@@ -1,6 +1,21 @@
-# experimental transformer architectures
+<p align="center">
+  <h1 align="center">Experimental Transformer Architectures</h1>
+  <p align="center">
+    17 experimental language model architectures where hidden dimension equals vocabulary size. The register state IS the prediction at every step.
+    <br /><br />
+    <a href="#quick-start">Quick Start</a>
+    &middot;
+    <a href="https://github.com/urmzd/exp-agi-models/issues">Report Bug</a>
+    &middot;
+    <a href="#model-versions">Model Versions</a>
+  </p>
+</p>
 
-Exploring whether vocabulary-space computation — where every hidden state is a readable distribution over words — can match opaque-embedding architectures at language modeling.
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/urmzd/exp-agi-models" alt="License"></a>
+</p>
+
+Exploring whether vocabulary-space computation, where every hidden state is a readable distribution over words, can match opaque-embedding architectures at language modeling.
 
 ## What This Is
 
