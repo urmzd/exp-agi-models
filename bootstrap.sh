@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Bootstrap exp-agi-models on RunPod from scratch
-# Usage: curl -sSL https://raw.githubusercontent.com/urmzd/exp-agi-models/main/bootstrap.sh | bash
+# Bootstrap experimental-transformer-architectures on RunPod from scratch
+# Usage: curl -sSL https://raw.githubusercontent.com/urmzd/experimental-transformer-architectures/main/bootstrap.sh | bash
 set -euo pipefail
 
 cd /workspace
 
 # Clone repo
-[ -d exp-agi-models ] || git clone https://github.com/urmzd/exp-agi-models.git
-cd exp-agi-models
+[ -d experimental-transformer-architectures ] || git clone https://github.com/urmzd/experimental-transformer-architectures.git
+cd experimental-transformer-architectures
 
 # Install uv
 if ! command -v uv &>/dev/null; then
@@ -25,7 +25,7 @@ python data/download_data.py --variant sp1024
 
 echo ""
 echo "=== Ready ==="
-echo "cd /workspace/exp-agi-models"
+echo "cd /workspace/experimental-transformer-architectures"
 echo ""
 echo "# Run v4 (101K params, associative memory):"
 echo "MODEL_VERSION=v4 TRAIN_BATCH_TOKENS=491520 GRAD_ACCUM_STEPS=16 \\"

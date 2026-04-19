@@ -38,13 +38,13 @@ SSH config alias: `runpod` (configured in `~/.ssh/config`, key: `~/.ssh/runpod`)
 Setup on a fresh pod:
 ```bash
 cd /workspace && \
-git clone https://github.com/urmzd/exp-agi-models.git && \
-cd exp-agi-models && bash setup.sh
+git clone https://github.com/urmzd/experimental-transformer-architectures.git && \
+cd experimental-transformer-architectures && bash setup.sh
 ```
 
 Run training:
 ```bash
-cd /workspace/exp-agi-models && \
+cd /workspace/experimental-transformer-architectures && \
 TRAIN_BATCH_TOKENS=491520 \
 GRAD_ACCUM_STEPS=16 \
 TRAIN_LOG_EVERY=10 \

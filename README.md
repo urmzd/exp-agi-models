@@ -5,14 +5,14 @@
     <br /><br />
     <a href="#quick-start">Quick Start</a>
     &middot;
-    <a href="https://github.com/urmzd/exp-agi-models/issues">Report Bug</a>
+    <a href="https://github.com/urmzd/experimental-transformer-architectures/issues">Report Bug</a>
     &middot;
     <a href="#model-versions">Model Versions</a>
   </p>
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/urmzd/exp-agi-models" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/urmzd/experimental-transformer-architectures" alt="License"></a>
 </p>
 
 Exploring whether vocabulary-space computation, where every hidden state is a readable distribution over words, can match opaque-embedding architectures at language modeling.
@@ -114,7 +114,7 @@ No embedding. No output projection.
 
 ```bash
 # Setup on RunPod
-curl -sSL https://raw.githubusercontent.com/urmzd/exp-agi-models/main/setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/urmzd/experimental-transformer-architectures/main/setup.sh | bash
 
 # Or manually
 uv pip install --system -r pyproject.toml
