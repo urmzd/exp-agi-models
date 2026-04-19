@@ -154,3 +154,11 @@ All hyperparameters configurable via environment variables. See `core/config.py`
 - Mamba (Gu & Dao 2023) — data-dependent state transitions
 - Predictive coding (Rao & Ballard 1999) — cortex passes prediction errors
 - Sparse coding (Olshausen & Field 1996) — only 1-5% of cortical neurons fire
+
+## Agent Skill
+
+This repo's conventions are available as portable agent skills in [`skills/`](skills/).
+
+## License
+
+[Apache-2.0](LICENSE)
