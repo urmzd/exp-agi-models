@@ -1,24 +1,33 @@
-# v1: Shared Attention + Fourier Register Ops
+# v1_shared_attn — Shared GQA attention + per-step Fourier channel mix
 
-**Status**: Best so far — loss dropped 7.42 → 4.78, val_bpb 2.83 in 250 steps on 3xA40.
+## Mechanism
 
-## Architecture
-- Shared causal self-attention (GQA, RoPE) reused across N recurrent steps
-- Per-step Fourier register ops for within-position transforms
-- dim = vocab_size = 1024, no embedding, no output projection
+Vocab-dim state (V = 1024). Input is one-hot. No output projection.
+
+Per recurrent step:
+- Cross-position: GQA self-attention with RoPE, **weights shared across all steps**.
+- Within-position: independent per-step Fourier-parameterized channel mixer.
+  Two V x C projections built as `basis @ coeffs.T` where `basis` is a
+  fixed sin/cos grid over vocab indices. Channels are mixed by a dense
+  C x C matrix plus nonlinearity.
+
+The Fourier basis imposes a smoothness prior over vocab-id ordering. Vocab
+ids are arbitrary (BPE), so this is a parameter-efficient low-rank
+parameterization rather than a frequency decomposition of language.
+
+## Status
+
+Plateaus at val_loss ~6.06. Attention in vocab space is dominated by Q/K/V
+projection cost (3M+ params) and the benefit does not justify the
+overhead at this scale.
 
 ## Params
-- ~3.2M total (99% in shared attention Q/K/V/O matrices)
-- 8 recurrent steps, 32 channels, 16 Fourier basis
 
-## Results (3xA40, 10min)
-```
-step:0   val_bpb:4.3945
-step:250 val_bpb:2.8318  (stopped at 10min wallclock)
-```
+~3.4M total, most in the shared Q/K/V/O matrices.
 
 ## Run
+
 ```bash
-TRAIN_BATCH_TOKENS=491520 GRAD_ACCUM_STEPS=16 NUM_RECURRENT_STEPS=8 \
-torchrun --standalone --nproc_per_node=3 train.py
+MODEL_VERSION=v1_shared_attn \
+torchrun --standalone --nproc_per_node=$(nvidia-smi -L | wc -l) train.py
 ```

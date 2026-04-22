@@ -7,7 +7,7 @@ from core.config import Hyperparameters
 
 def test_defaults():
     hp = Hyperparameters()
-    assert hp.model_version == "v8_graph"
+    assert hp.model_version == "v8_lowrank_vv"
     assert hp.vocab_size == 1024
     assert hp.lr == 0.03
     assert hp.seed == 1337

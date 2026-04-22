@@ -1,5 +1,5 @@
 """
-RegisterGPT — PyTorch/CUDA training for all model versions.
+Experimental Transformer Architectures — PyTorch/CUDA training entry point.
 Compatible with torchrun for multi-GPU training.
 """
 from __future__ import annotations

@@ -1,23 +1,26 @@
 """
-RegisterGPT v2 — Attention-free register machine.
+v2_conv: Depthwise causal 1D convolution across positions + Fourier-
+parameterized within-position channel mix, applied to a vocab-dimensional
+state.
 
-Replaces shared self-attention with per-step depthwise causal convolutions.
-Each step is a unique LGP instruction: cheap cross-position mixing (conv)
-followed by within-position register transforms (Fourier ops).
+Hidden state is V-dimensional; input is one-hot; no output projection.
 
-  Input:  one-hot("cat") → R["cat"] = 1.0, everything else 0.0
-  State:  always a distribution over words
-  Output: register state IS the prediction — no output projection
+Per step (each step has its own weights — no sharing):
+  x = x + scale_i * DepthwiseCausalConv_i(rms_norm(x))
+  x = x + scale_i * FourierOp_i(rms_norm(x))
 
-Architecture:
-  1. One-hot encoding over vocabulary (no learned embedding)
-  2. N unique steps, each:
-     a. Depthwise causal conv  (cross-position: local context, O(T·d·k))
-     b. Fourier register op    (within-position: combine word activations)
-  3. Register state → softcap → cross-entropy loss
+DepthwiseCausalConv: one filter per V dimension, kernel_size taps back in
+position, left-padded to preserve causality. Captures "how active was
+dimension j over the last k positions" without cross-dimension mixing.
+Cross-dimension mixing happens in the Fourier op (see caveat below).
 
-No attention. No embedding. No output projection.
-Many cheap unique steps instead of few expensive shared ones.
+FourierOp: two V x C projections parameterized as linear combinations of a
+fixed sin/cos basis over vocab indices. The basis imposes a smoothness
+prior over vocab-id ordering — which is arbitrary, since vocab ids come
+from BPE. Functionally a low-rank V -> C -> V mixer with a non-generic
+parameterization.
+
+Result per README: 353K params, val_loss 5.39, strong baseline.
 """
 
 import math
@@ -130,22 +133,16 @@ class RegisterStep(nn.Module):
 
 
 # ---------------------------------------------------------------------------
-# RegisterGPT v2
+# CausalConvLM
 # ---------------------------------------------------------------------------
 
-class RegisterGPT(AgiModel):
-    """Attention-free language model where registers ARE words.
-
-    No embedding matrix — input is one-hot.
-    No output projection — register state is the prediction.
-    No attention — depthwise causal convolutions for cross-position mixing.
-    Many cheap unique steps instead of few expensive shared ones.
-    """
+class CausalConvLM(AgiModel):
+    """Depthwise causal 1D conv + per-step Fourier channel mix in vocab space."""
 
     version = "v2_conv"
     architecture = "Causal convolution"
     cross_position = "Depthwise causal convolution"
-    within_position = "Fourier register ops"
+    within_position = "Fourier-parameterized channel mix"
 
     class Settings(BaseSettings):
         vocab_size: int = 1024

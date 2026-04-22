@@ -49,7 +49,7 @@ class ScheduleConfig(BaseSettings):
 
 
 class ModelCommonConfig(BaseSettings):
-    model_version: str = "v8_graph"
+    model_version: str = "v8_lowrank_vv"
     vocab_size: int = 1024
     num_steps: int = 8
     n_fourier_basis: int = 16

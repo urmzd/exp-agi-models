@@ -6,9 +6,9 @@ Instantiates every model variant, runs forward+backward with synthetic tokens,
 and reports: param count, memory, throughput, loss, gradient health.
 
 Usage:
-    python benchmark.py                  # all models, defaults
-    python benchmark.py v3 meta policy   # specific models only
-    python benchmark.py --seq-len 512 --batch 4 --steps 3  # custom sizes
+    python benchmark.py                                                    # all models, defaults
+    python benchmark.py v8_lowrank_vv v9_linattn v10_state_cond_op         # specific models only
+    python benchmark.py --seq-len 512 --batch 4 --steps 3                  # custom sizes
 """
 from __future__ import annotations
 
@@ -148,15 +148,15 @@ def main():
         unique_steps=5, invocations_per_step=2, n_heads=4, transform_rank=8,
         # wave
         band_split="4,4,8", slow_decay_init=4.0, fast_decay_init=2.0,
-        # lgp / policy
+        # soft_ops / state_cond_op
         n_ops=8,
-        # graph
+        # lowrank_vv
         interaction_rank=64,
-        # meta / brainwave / tpg
+        # linattn / mixed_ops / hard_routing
         state_dim=64, inner_dim=128,
-        # sparse
+        # vocab_slice
         k_active=256, inner_mul=2, parallel_waves=True, grad_checkpoint=False,
-        # tpg
+        # hard_routing
         gumbel_tau=1.0, halt_threshold=0.5, ponder_lambda=0.01,
     )
 

@@ -6,16 +6,22 @@ import sys
 
 
 MODELS = [
-    {"version": "v1",     "env": {"NUM_STEPS": "8"}},
-    {"version": "v2",     "env": {"NUM_STEPS": "16"}},
-    {"version": "v3",     "env": {}},
-    {"version": "v4",     "env": {}},
-    {"version": "gauss",  "env": {"N_FOURIER_BASIS": "64"}},
-    {"version": "wave",   "env": {}},
-    {"version": "lgp",    "env": {"NUM_STEPS": "16", "N_CHANNELS": "64"}},
-    {"version": "graph",  "env": {}},
-    {"version": "meta",   "env": {}},
-    {"version": "policy", "env": {}},
+    {"version": "v1_shared_attn",     "env": {"NUM_STEPS": "8"}},
+    {"version": "v2_conv",            "env": {"NUM_STEPS": "16"}},
+    {"version": "v3_fourier_linattn", "env": {}},
+    {"version": "v4_weight_shared",   "env": {}},
+    {"version": "v5_fft_linattn",     "env": {"N_FOURIER_BASIS": "64"}},
+    {"version": "v6_banded_fourier",  "env": {}},
+    {"version": "v7_soft_ops",        "env": {"NUM_STEPS": "16", "N_CHANNELS": "64"}},
+    {"version": "v8_lowrank_vv",      "env": {}},
+    {"version": "v9_linattn",         "env": {}},
+    {"version": "v10_state_cond_op",  "env": {}},
+    {"version": "v11a_mixed_ops",     "env": {}},
+    {"version": "v11b_hard_routing",  "env": {}},
+    {"version": "v12_vocab_slice",    "env": {}},
+    {"version": "v14_data_dependent", "env": {}},
+    {"version": "v15_aux_loss",       "env": {}},
+    {"version": "v16_multi_branch",   "env": {}},
 ]
 
 # Detect GPU count

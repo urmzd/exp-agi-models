@@ -1,27 +1,24 @@
 """
-RegisterGPT — A language model where each register is a word.
+v1_shared_attn: GQA self-attention (weight-shared across depth) + per-step
+Fourier-parameterized channel mix, applied to a vocab-dimensional state.
 
-Instead of mapping tokens into an opaque embedding space, computation stays
-in vocabulary space the entire time.
+Hidden state is V-dimensional; input is one-hot; no output projection.
 
-  Input:  one-hot("cat") → R["cat"] = 1.0, everything else 0.0
-  State:  always a distribution over words — transparent by definition
-  Output: register state IS the prediction — no output projection needed
+Per step:
+  x = x + scale_i * SharedAttention(rms_norm(x))
+  x = x + scale_i * FourierOp_i(rms_norm(x))
 
-Every intermediate step is readable: after any instruction, you can see
-which words are active and how strongly. Interpretability by construction.
+SharedAttention: GQA with RoPE, same weights reused at every step.
+FourierOp_i: parameterizes two V x C projections (read, write) as a linear
+combination of a fixed sin/cos basis over vocab indices; channels are mixed
+by a C x C matrix plus nonlinearity. One independent op per step.
 
-Architecture:
-  1. One-hot encoding over vocabulary (no learned embedding)
-  2. Repeat N times:
-     a. Shared self-attention  (cross-position: what words co-occur?)
-     b. Fourier register op    (within-position: combine word activations)
-  3. Register state → softcap → cross-entropy loss
+Note: the Fourier basis indexes vocab ids, which are arbitrary BPE outputs.
+The basis imposes a smoothness prior over vocab-id ordering that has no
+linguistic meaning; this is a parameter-efficient low-rank projection with
+an unusual parameterization, not a frequency decomposition of language.
 
-The Fourier register ops use a compact basis over vocabulary indices.
-Low frequencies group words broadly (nouns vs verbs).
-High frequencies distinguish specific words (cat vs dog).
-Each operation costs ~585 parameters — 3,400x cheaper than a dense layer.
+Result per README: 3.4M params, plateaus at val_loss 6.06.
 """
 
 import math
@@ -179,22 +176,16 @@ class FourierRegisterOp(nn.Module):
 
 
 # ---------------------------------------------------------------------------
-# RegisterGPT
+# SharedAttnLM
 # ---------------------------------------------------------------------------
 
-class RegisterGPT(AgiModel):
-    """Language model where registers ARE words.
+class SharedAttnLM(AgiModel):
+    """Shared GQA attention + per-step Fourier channel mix in vocab space."""
 
-    No embedding matrix — input is one-hot.
-    No output projection — register state is the prediction.
-    Hidden dimension = vocabulary size.
-    Every intermediate state is a named distribution over words.
-    """
-
-    version = "v1_attention"
+    version = "v1_shared_attn"
     architecture = "Shared attention"
-    cross_position = "GQA + RoPE (shared weights)"
-    within_position = "Fourier register ops"
+    cross_position = "GQA + RoPE (weights shared across depth)"
+    within_position = "Fourier-parameterized channel mix"
 
     class Settings(CommonSettings):
         num_heads: int = 8

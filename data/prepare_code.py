@@ -168,7 +168,7 @@ def main():
     print("\nTo train on code:")
     print("  DATA_PATH=./data/datasets/code_sp1024 \\")
     print("  TOKENIZER_PATH=./data/tokenizers/code_1024_bpe.model \\")
-    print("  MODEL_VERSION=v8_graph \\")
+    print("  MODEL_VERSION=v8_lowrank_vv \\")
     print("  torchrun --standalone --nproc_per_node=3 train.py")
 
 

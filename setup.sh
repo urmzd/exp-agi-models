@@ -17,4 +17,4 @@ python data/download_data.py --variant sp1024
 
 echo "Setup complete. Run training with:"
 echo "  cd /workspace/experimental-transformer-architectures"
-echo "  MODEL_VERSION=v3 torchrun --standalone --nproc_per_node=\$(nvidia-smi -L | wc -l) train.py"
+echo "  MODEL_VERSION=v8_lowrank_vv torchrun --standalone --nproc_per_node=\$(nvidia-smi -L | wc -l) train.py"

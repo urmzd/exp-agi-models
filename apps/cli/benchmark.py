@@ -3,7 +3,7 @@ Benchmark CLI — run all (or selected) model versions under identical condition
 and produce a comparison table.
 
 Usage:
-    benchmark [--versions v1,v3,sparse] [--minutes 10] [--batch 491520] [--warmup 5]
+    benchmark [--versions v1_shared_attn,v8_lowrank_vv] [--minutes 10] [--batch 491520] [--warmup 5]
 """
 from __future__ import annotations
 
@@ -22,11 +22,11 @@ def _get_all_versions():
 
 
 ALL_VERSIONS = [  # fallback ordering; overridden at runtime if models importable
-    "v1_attention", "v2_conv", "v3_assoc", "v4_golf",
-    "v5_gauss", "v6_wave", "v7_lgp", "v8_graph",
-    "v9_meta", "v10_policy", "v11_brainwave", "v11_tpg",
-    "v12_sparse", "v13_embed", "v14_adaptive",
-    "v15_predictive", "v16_columnar",
+    "v1_shared_attn", "v2_conv", "v3_fourier_linattn", "v4_weight_shared",
+    "v5_fft_linattn", "v6_banded_fourier", "v7_soft_ops", "v8_lowrank_vv",
+    "v9_linattn", "v10_state_cond_op", "v11a_mixed_ops", "v11b_hard_routing",
+    "v12_vocab_slice", "v13_with_embedding", "v14_data_dependent",
+    "v15_aux_loss", "v16_multi_branch",
 ]
 
 
